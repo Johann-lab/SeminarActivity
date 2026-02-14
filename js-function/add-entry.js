@@ -1,19 +1,26 @@
-function addEntry() {
+// FIXED: Each function now has a single responsibility
+Guestbook.addEntry = function() {
   const name = document.getElementById("nameInput").value;
   const learn = document.getElementById("learnInput").value;
 
-  if (name === "" || learn === "") {
-    alert("Please fill in both fields!");
+  if (!this.validateEntry(name, learn)) {
     return;
   }
 
-  // 1. UI Logic
-  renderEntry(name, learn);
+  this.renderEntry(name, learn);
+  this.saveToStorage(name, learn);
+  this.clearForm();
+};
 
-  // 2. Data Persistence Logic
-  saveToStorage(name, learn);
+Guestbook.validateEntry = function(name, learn) {
+  if (name === "" || learn === "") {
+    alert("Please fill in both fields!");
+    return false;
+  }
+  return true;
+};
 
-  // 3. Cleanup Logic
+Guestbook.clearForm = function() {
   document.getElementById("nameInput").value = "";
   document.getElementById("learnInput").value = "";
-}
+};
